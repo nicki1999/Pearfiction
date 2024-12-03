@@ -1,14 +1,4 @@
-# Table of Contents
-
-1. [About the project](#about-the-project)
-   - [Built with](#built-with)
-2. [Getting started](#getting-started)
-   - [Prerequisites](#prerequisites)
-3. [Acknowledgements](#acknowledgements)
-
-## About the project
-
-### 1. Write a basic slot machine game in javascript using pixi.js
+## 1. Write a basic slot machine game in javascript using pixi.js
 
 Write a game in ECMAScript 6th edition (https://en.wikipedia.org/wiki/ECMAScript#ES2015) using pixi.js (https://pixijs.com/) or phaser (https://phaser.io/) that simulates a basic slot machine. The screen should display a 5 columns by 3 rows reels, a spin button below the reels and a text area below to display the wins. Elements should be centered in the screen and the game area containing the elements should rescale with window resizes.
 
@@ -46,7 +36,7 @@ Here is an example of some positions and the symbols that should be displayed on
       hv2 lv3 lv4 lv2 hv4
       hv2 hv2 hv3 hv3 hv1
 
-### 2. Next, implement the winnings calculation for the following paytable:
+## 2. Next, implement the winnings calculation for the following paytable:
 
      Symbol id | 3 of a kind | 4 of a kind | 5 of a kind
     -----------|-------------|-------------|-------------
@@ -124,27 +114,3 @@ And here's another example:
 
 _ Bonus _
 \_1. animation for reels change (https://pixijs.com/8.x/tutorials/getting-started#3)
-
-### built with
-
-<img src="https://upload.wikimedia.org/wikipedia/commons/6/6a/JavaScript-logo.png" alt="JavaScript Logo" width="20" height="20"/> <img src="https://files.pixijs.download/branding/pixijs-logo-full-light.png" alt="PixiJS Logo" width="20" height="20"/>
-
-## Getting Started
-
-Clone the project to your local directory with the following command
-git clone https://nikinajafi@bitbucket.org/pearfiction/front-end-dev-assignment-niki-najafi.git <br>Then open the project in your preferred IDE like VScode.
-
-### Run the project
-
-1. Download Node.js from https://nodejs.org/en
-2. Update Node.js to the latest version <br>
-   `npm install npm@latest -g`
-3. Navigate to the project's directory and install the dependencies that are listed in the package.json file using:
-   `npm install` command in the IDE's terminal window.
-4. Run the command `npm start` to start the project.
-
-## Acknowledgements
-
-- https://pixijs.com/8.x/tutorials/getting-started#1
-- https://github.com/gamedevland/pixi-project-template/tree/main/src/scripts
-- https://www.youtube.com/watch?v=oZInrjsClPg
