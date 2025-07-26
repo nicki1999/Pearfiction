@@ -1,23 +1,25 @@
 import * as PIXI from "pixi.js";
+import { Config } from "./Config";
+import { GameState } from "./GameState";
 import { App } from "../system/App";
 
 export class LabelScore extends PIXI.Text {
   constructor() {
     super();
-    this.x = App.config.scoreText.x;
-    this.y = App.config.scoreText.y;
-    this.anchor.set(App.config.scoreText.anchor);
-    this.style = App.config.scoreText.style;
+    this.x = Config.scoreText.x;
+    this.y = Config.scoreText.y;
+    this.anchor.set(Config.scoreText.anchor);
+    this.style = Config.scoreText.style;
     App.eventEmitter.on("score", () => {
-      this.renderScore(App.config.score.winNumber);
+      this.renderScore(GameState.score.winNumber);
     });
-    this.renderScore(App.config.score.winNumber);
+    this.renderScore(GameState.score.winNumber);
   }
 
   renderScore(scoreText = 0) {
-    const winDetailText = App.config.score.winDetail
+    const winDetailText = GameState.score.winDetail
       .map((detail) => {
-        return `${detail.paylineID}, ${detail.symbolID}, x${detail.repetition}, ${detail.payout}`;
+        return `- payline ${detail.paylineID}, ${detail.symbolID}, x${detail.repetition}, ${detail.payout}`;
       })
       .join("\n");
     console.log("Rendering score: ", scoreText);

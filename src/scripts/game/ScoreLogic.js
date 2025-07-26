@@ -1,24 +1,24 @@
-import * as PIXI from "pixi.js";
+import { Config } from "./Config";
+import { GameState } from "./GameState";
 import { App } from "../system/App";
 
 export class ScoreLogic {
   checkPaylines() {
     let winDetected = false;
-    App.config.score.winDetail = [];
-    const paylineKeys = Object.keys(App.config.payline);
+    GameState.score.winDetail = [];
 
-    paylineKeys.forEach((key) => {
-      const win = this.checkPayline(App.config.payline[key], key);
-      console.log("value: " + App.config.payline[key], "key: ",key);
+    Config.Payline.forEach((line, idx) => {
+      const paylineSymbols = line.map(([r, c]) => GameState.updatedMatrix[r][c]);
+      const win = this.checkPayline(paylineSymbols, idx + 1);
       if (win) {
         winDetected = true;
       }
     });
     if (winDetected) {
-      App.config.score.winNumber += 1;
+      GameState.score.winNumber += 1;
       // Emit the 'score' event to update the UI
     } else {
-      App.config.score.winDetail = [];
+      GameState.score.winDetail = [];
     }
     App.eventEmitter.emit("score");
   }
@@ -95,12 +95,12 @@ export class ScoreLogic {
     // );
     let payout = 0;
     payout = this.payout(symbolID, repetition);
-    App.config.score.winDetail.push({
+    GameState.score.winDetail.push({
       paylineID,
       symbolID,
       repetition,
       payout,
     });
-    console.log(App.config.score.winDetail);
+    console.log(GameState.score.winDetail);
   }
 }

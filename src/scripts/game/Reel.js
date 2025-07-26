@@ -1,6 +1,7 @@
 import * as PIXI from "pixi.js";
 import { App } from "../system/App";
-
+import { Config } from "./Config";
+import { GameState } from "./GameState";
 export class Reel {
   constructor(rows, cols, x) {
     this.rows = rows;
@@ -26,8 +27,8 @@ export class Reel {
     }
   }
   newRound(row, col) {
-    this.matrix = App.config.matrix.bands;
-    this.updateRow = App.config.reel.position[col];
+    this.matrix = Config.Reelset;
+    this.updateRow = GameState.reelPositions[col];
     let texture = "";
     if (row == 1) {
       this.updateRow = this.updateRow + 1;
@@ -45,8 +46,8 @@ export class Reel {
     }
     const cellValue = this.matrix[col][this.updateRow];
     //Populate the new matrix's values
-    App.config.reel.updatedMatrix[row][col] = cellValue;
-    console.log("show: ", App.config.reel.updatedMatrix);
+    GameState.updatedMatrix[row][col] = cellValue;
+    console.log("show: ", GameState.updatedMatrix);
     texture = cellValue + "_symbol";
 
     const tile = App.sprite(texture);

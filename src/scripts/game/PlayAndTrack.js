@@ -1,7 +1,8 @@
 import * as PIXI from "pixi.js";
 import { App } from "../system/App";
 import { LabelScore } from "./LabelScore";
-import { Reel } from "./Reel";
+import { GameState } from "./GameState";
+import { Config } from "./Config";
 
 export class PlayAndTrack {
   constructor(rows, cols) {
@@ -40,7 +41,7 @@ export class PlayAndTrack {
     tile.buttonMode = true;
 
     tile.on("pointerdown", () => {
-      App.config.reel.position = this.randomSpin();
+      GameState.reelPositions = this.randomSpin();
       // Call a custom handler method
       App.reelInstance.updateTiles();
       App.scoreInstance.checkPaylines();
@@ -54,7 +55,7 @@ export class PlayAndTrack {
   }
 
   randomSpin() {
-    const position = App.config.reel.position;
+    const position = GameState.reelPositions;
     for (let i = 0; i < position.length; i++) {
       const randomNumber = Math.floor(Math.random() * 21);
       console.log("random", i);
