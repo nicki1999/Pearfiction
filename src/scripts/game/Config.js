@@ -1,16 +1,13 @@
-// define all of the entities here
+// Define all of the entities here
 import { Game } from "./Game";
 import { Tools } from "../system/Tools";
-import { App } from "../system/App";
-import { Reel } from "./Reel";
 
 export const Config = {
   loader: Tools.massiveRequire(
     require["context"]("./../../sprites/", true, /\.(mp3|png|jpe?g)$/)
   ),
 
-  matrix: {
-    bands: [
+    Reelset: [
       //B1
       [
         "hv2",
@@ -127,11 +124,26 @@ export const Config = {
         "lv4",
       ],
     ],
+  Paytable:{
+    hv1: {3: 10, 4: 20, 5: 50},
+    hv2: {3: 5,  4: 10, 5: 20},
+    hv3: {3: 5,  4: 10, 5: 15},
+    hv4: {3: 5,  4: 10, 5: 15},
+    lv1: {3: 2,  4: 5,  5: 10},
+    lv2: {3: 1,  4: 2,  5: 5},
+    lv3: {3: 1,  4: 2,  5: 3},
+    lv4: {3: 1,  4: 2,  5: 3}
   },
-  reel: {
-    position: [0, 0, 0, 0, 0],
-    updatedMatrix: Array.from({ length: 3 }, () => Array(5).fill("")),
-  },
+  Payline: [
+    [[1,0],[1,1],[1,2],[1,3],[1,4]],  // Payline 1 (middle row)
+    [[0,0],[0,1],[0,2],[0,3],[0,4]],  // Payline 2 (top row)
+    [[2,0],[2,1],[2,2],[2,3],[2,4]],  // Payline 3 (bottom row)
+    [[0,0],[0,1],[1,2],[2,3],[2,4]],  // Payline 4 (V shape)
+    [[2,0],[2,1],[1,2],[0,3],[0,4]],  // Payline 5 (inverted V)
+    [[0,0],[1,1],[2,2],[1,3],[0,4]],  // Payline 6 (zigzag)
+    [[2,0],[1,1],[0,2],[1,3],[2,4]]   // Payline 7 (zigzag inverse)
+  ],
+
   scoreText: {
     x: 10,
     y: 10,
@@ -143,48 +155,7 @@ export const Config = {
       fill: ["#000000"],
     },
   },
-
-  score: {
-    winNumber: 0,
-    winDetail: [],
-  },
-
   startScene: Game,
 };
 
-Config.payline = {
-  payline1: Config.reel.updatedMatrix[1],
-  payline2: Config.reel.updatedMatrix[0],
-  payline3: Config.reel.updatedMatrix[2],
-  
-  get payline4() {
-    return [
-      Config.reel.updatedMatrix[0][0],
-      Config.reel.updatedMatrix[0][1],
-      Config.reel.updatedMatrix[1][2],
-      Config.reel.updatedMatrix[2][3],
-      Config.reel.updatedMatrix[2][4],
-    ];
-  },
-get payline5(){ return [
-  Config.reel.updatedMatrix[0][3],
-  Config.reel.updatedMatrix[0][4],
-  Config.reel.updatedMatrix[1][2],
-  Config.reel.updatedMatrix[2][0],
-  Config.reel.updatedMatrix[2][1],
-];},
-get payline6(){ return [
-    Config.reel.updatedMatrix[0][0],
-    Config.reel.updatedMatrix[1][1],
-    Config.reel.updatedMatrix[2][2],
-    Config.reel.updatedMatrix[1][3],
-    Config.reel.updatedMatrix[0][4],
-  ];},
-  get payline7(){ return [
-    Config.reel.updatedMatrix[2][0],
-    Config.reel.updatedMatrix[1][1],
-    Config.reel.updatedMatrix[0][2],
-    Config.reel.updatedMatrix[1][3],
-    Config.reel.updatedMatrix[2][4],
-  ];},
-};
+
