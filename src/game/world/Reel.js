@@ -13,9 +13,15 @@ export class Reel {
     this.createTiles();
   }
   updateTiles() {
-    this.container.removeChildren();
-    this.tiles = [];
-    this.createTiles();
+  this.tiles.forEach((tile, idx) => {
+    const row = Math.floor(idx / this.cols);
+    const col = idx % this.cols;
+    const symbol = this.gameState.updatedMatrix[row][col];
+    const textureKey = symbol + "_symbol";
+
+    tile.texture = App.res(textureKey);
+    tile.symbolID = symbol;
+  });
 
   }
   createContainer(x) {
@@ -58,31 +64,18 @@ export class Reel {
     this.container.addChild(tile);
   }
 
-   stopReel(reelIndex) {
+  stopReel(reelIndex) {
   const columnTiles = this.tiles.filter((_, idx) => idx % this.cols === reelIndex);
 
   for (let row = 0; row < this.rows; row++) {
     const symbol = this.gameState.updatedMatrix[row][reelIndex];
     const textureKey = symbol + "_symbol";
 
-    // Remove the old tile
-    const oldTile = columnTiles[row];
-    const newTile = this.spriteFactory(textureKey); // returns a Sprite, not a Texture
-    newTile.symbolID = symbol;
-
-
-    newTile.width = oldTile.width;
-    newTile.height = oldTile.height;
-    newTile.x = oldTile.x;
-    newTile.y = row * (window.innerHeight * 0.7) / this.rows;
-
-    // Replace in container
-    this.container.removeChild(oldTile);
-    this.container.addChild(newTile);
-
-    // Replace in tiles array
-    const tileIndex = this.tiles.indexOf(oldTile);
-    if (tileIndex !== -1) this.tiles[tileIndex] = newTile;
+    // Instead of replacing the sprite, just update it
+    const tile = columnTiles[row];
+    tile.texture = App.res(textureKey);  // Reuse texture
+    tile.symbolID = symbol;              // Update symbol ID for win tracking
+    tile.y = row * (window.innerHeight * 0.7) / this.rows;
   }
 
   this.spinningReels[reelIndex] = false;

@@ -63,14 +63,29 @@ export class PlayAndTrack {
     tile.y = window.innerHeight * 0.7;
   }
 
-  randomSpin() {
+   randomSpin() {
     const position = GameState.reelPositions;
+
     for (let i = 0; i < position.length; i++) {
-      const randomNumber = Math.floor(Math.random() * 21);
-      console.log("random", i);
+      const reelBand = this.reel.reelSet[i]; // Use reel's reelSet safely
+      const randomNumber = Math.floor(Math.random() * reelBand.length);
       position[i] = randomNumber;
     }
-    console.log("this is position", position);
+
+    // Update updatedMatrix with the new random reel positions
+    for (let row = 0; row < 3; row++) {
+      for (let col = 0; col < this.reel.cols; col++) {
+        let pos = position[col] + row;
+        const band = this.reel.reelSet[col];
+        if (pos >= band.length) pos = pos % band.length;
+
+        GameState.updatedMatrix[row][col] = band[pos];
+      }
+    }
+
+    console.log("Random reel positions:", position);
+    console.log("Updated Matrix:", GameState.updatedMatrix);
+
     return position;
   }
 }
