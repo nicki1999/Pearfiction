@@ -5,13 +5,13 @@ import { GameState } from "./GameState";
 import { Config } from "./Config";
 
 export class PlayAndTrack {
-  constructor(rows, cols) {
+  constructor(rows, cols, reel, scoreLogic) {
     this.rows = rows;
     this.cols = cols;
+    this.reel = reel;
+    this.scoreLogic = scoreLogic;
     this.createContainer();
     this.layoutContainer();
-    this.labelScore = new LabelScore();
-    //this.container.addChild(this.labelScore);
   }
 
   createContainer() {
@@ -43,8 +43,8 @@ export class PlayAndTrack {
     tile.on("pointerdown", () => {
       GameState.reelPositions = this.randomSpin();
       // Call a custom handler method
-      App.reelInstance.updateTiles();
-      App.scoreInstance.checkPaylines();
+      this.reel.updateTiles();
+      this.scoreLogic.checkPaylines();
     });
 
     tile.width = window.innerWidth / this.rows / this.rows;
