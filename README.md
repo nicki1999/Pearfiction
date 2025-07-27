@@ -5,6 +5,7 @@
 2. [Getting started](#getting-started)
    - [Prerequisites](#prerequisites)
 3. [Acknowledgements](#acknowledgements)
+4. [Improvements](#improvements)
 
 ## About the project
 
@@ -148,3 +149,34 @@ git clone https://nikinajafi@bitbucket.org/pearfiction/front-end-dev-assignment-
 - https://pixijs.com/8.x/tutorials/getting-started#1
 - https://github.com/gamedevland/pixi-project-template/tree/main/src/scripts
 - https://www.youtube.com/watch?v=oZInrjsClPg
+
+## Improvements
+### 1. Static vs. Dynamic Data Separation
+Separated immutable configuration (symbols, paylines, payout tables) into `Config.js` and mutable runtime state (reel positions, updated matrices, scores) into `GameState.js`.  
+This keeps the codebase organized and prevents accidental overwriting of constants.
+
+### 2. Optimized Data Structures
+Restructured `Reelset`, `Payline`, and `Paytable` for better readability and faster processing.  
+This makes win calculations and reel updates cleaner and more maintainable.
+
+### 3. Dependency Injection for Flexibility
+Introduced Dependency Injection, passing dependencies like `GameState`, `Config`, and `spriteFactory` into constructors (`Reel`, `ScoreLogic`, `PlayAndTrack`).  
+This approach improves modularity, simplifies testing, and allows future feature expansion.
+
+### 4. Accurate Scoring System
+Rebuilt the scoring logic to track **total wins per spin** as well as detailed line-by-line payouts.  
+Now displays a proper breakdown, e.g.:  
+
+### 5. Refined Folder Structure
+Reorganized the project into logical sections:
+- `core/` for the core app and setup  
+- `config/` for configuration and state  
+- `world/` for game objects (Reel, etc.)  
+- `ui/` for interface elements (buttons, labels)  
+- `managers/` for managing gameplay  
+
+This improves scalability and keeps related logic together.
+
+### 6. Slot Machine Reel Animation (Bonus)
+Added a **smooth, slot-machine-like reel animation** using PixiJS’s `ticker`.  
+Reels now spin with staggered stop timing, creating a natural slot machine effect for a more engaging player experience.
