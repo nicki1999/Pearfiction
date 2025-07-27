@@ -173,10 +173,12 @@ Reorganized the project into logical sections:
 - `config/` for configuration and state  
 - `world/` for game objects (Reel, etc.)  
 - `ui/` for interface elements (buttons, labels)  
-- `managers/` for managing gameplay  
-
+- `managers/` for managing gameplay
 This improves scalability and keeps related logic together.
 
 ### 6. Slot Machine Reel Animation (Bonus)
 Added a **smooth, slot-machine-like reel animation** using PixiJS’s `ticker`.  
 Reels now spin with staggered stop timing, creating a natural slot machine effect for a more engaging player experience.
+
+### 7. Instant Window Resize Responsiveness
+The interface now adjusts dynamically to window size changes without requiring a page reload.
