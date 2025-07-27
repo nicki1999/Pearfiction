@@ -26,42 +26,32 @@ export class PlayAndTrack {
       }
     }
   }
-
-  layout(row, col) {
-    let texture = "";
-    if (row === 0) {
-      texture = "spin_button";
-    } else {
-      if (!this.labelScore || !this.container.children.includes(this.labelScore)) {
-  this.labelScore = new LabelScore();
-  this.labelScore.x = (window.innerWidth - this.labelScore.width) / 2 - 100;
-  this.labelScore.y = window.innerHeight * 0.77;
-  this.container.addChild(this.labelScore);
-}
-      return; // Skip creating a tile
-    }
-    const tile = App.sprite(texture);
+layout(row, col) {
+  if (row === 0) {
+    const tile = App.sprite("spin_button");
     tile.interactive = true;
     tile.buttonMode = true;
 
     tile.on("pointerdown", () => {
-        if (this.isSpinning) return; 
+      if (this.isSpinning) return;
       this.isSpinning = true;
-        GameState.reelPositions = this.randomSpin();
-      // Call a custom handler method
+      GameState.reelPositions = this.randomSpin();
       this.reel.spinAnimation(() => {
-    this.scoreLogic.checkPaylines(); 
-            this.isSpinning = false;
-
-  });
+        this.scoreLogic.checkPaylines();
+        this.isSpinning = false;
+      });
     });
 
-    tile.width = window.innerWidth / this.rows / this.rows;
-    tile.height = (window.innerHeight * 0.2) / this.rows;
     this.container.addChild(tile);
-    tile.x = (window.innerWidth - tile.width) / 2;
-    tile.y = window.innerHeight * 0.7;
+     if (!this.labelScore || !this.container.children.includes(this.labelScore)) {
+      this.labelScore = new LabelScore();
+      this.container.addChild(this.labelScore);
+    }
+
+    // Now position both elements together
+    this.positionUI(tile);
   }
+}
 
    randomSpin() {
     const position = GameState.reelPositions;
@@ -88,4 +78,35 @@ export class PlayAndTrack {
 
     return position;
   }
+  resize() {
+  const spinButton = this.container.children.find(
+    c => c.texture && c.texture.textureCacheIds?.includes("spin_button")
+  );
+  this.positionUI(spinButton); // <-- Reuse the same logic
+}
+positionUI(spinButton) {
+  if (!spinButton) return;
+
+  const aspectRatio = spinButton.texture.orig.width / spinButton.texture.orig.height;
+  let baseHeight = (window.innerHeight * 0.2) / this.rows;
+  let baseWidth = baseHeight * aspectRatio;
+
+  // Scale the button by 30%
+  spinButton.height = baseHeight * 1.3;
+  spinButton.width = baseWidth * 1.3;
+
+  // Center it
+  spinButton.x = (window.innerWidth - spinButton.width) / 2;
+  spinButton.y = window.innerHeight * 0.7;
+
+  // Position the score label relative to the button
+  if (this.labelScore) {
+    if (this.labelScore.anchor) {
+      this.labelScore.anchor.set(0.5, 0);
+    }
+    this.labelScore.x = spinButton.x + spinButton.width / 2;  // horizontally center
+    this.labelScore.y = spinButton.y + spinButton.height + 10; // directly below
+  }
+}
+
 }

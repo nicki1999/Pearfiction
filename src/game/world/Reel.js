@@ -119,6 +119,20 @@ export class Reel {
   App.app.ticker.add(animate);
 }
 
+resize() {
+  const tileWidth = window.innerWidth / this.cols;
+  const tileHeight = (window.innerHeight * 0.7) / this.rows;
+
+  this.tiles.forEach((tile, index) => {
+    const row = Math.floor(index / this.cols);
+    const col = index % this.cols;
+
+    tile.width = tileWidth;
+    tile.height = tileHeight;
+    tile.x = col * tileWidth;
+    tile.y = row * tileHeight;
+  });
+}
 
 
 }

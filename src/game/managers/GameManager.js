@@ -10,12 +10,18 @@ export class GameManager {
   constructor() {
     this.container = new PIXI.Container();
     this.createBackground();
-    window.addEventListener("resize", this.onResize.bind(this));
+    window.addEventListener("resize", () => {
+  this.bg.width = window.innerWidth;
+  this.bg.height = window.innerHeight;
+
+  if (this.reel) this.reel.resize();  // Instantly rescale reels
+  if (this.playAndTrack) this.playAndTrack.resize(); // Instantly rescale play and track UI
+});
   }
 
   spin() {
   // Generate random reel positions for the next spin
-  this.GameState.reelPositions = Array.from(
+ GameState.reelPositions = Array.from(
     { length: 5 },
     () => Math.floor(Math.random() * 21)
   );
@@ -57,19 +63,16 @@ export class GameManager {
     );
   }
   gameTrack(data) {
-    const playAndTrack = new PlayAndTrack(
+     this.playAndTrack = new PlayAndTrack(
       data.rows, 
       data.cols,
       this.reel,        
       this.scoreLogic 
     );
-    this.container.addChild(playAndTrack.container);
+    this.container.addChild(this.playAndTrack.container);
   }
   resizeBackground() {
     this.bg.width = window.innerWidth;
     this.bg.height = window.innerHeight;
-  }
-  onResize() {
-    this.resizeBackground();
   }
 }
