@@ -1,12 +1,12 @@
 import * as PIXI from "pixi.js";
-import { App } from "../system/App";
-import { Config } from "./Config";
-import { GameState } from "./GameState";
 export class Reel {
-  constructor(rows, cols, x) {
+  constructor(rows, cols, reelSet, gameState, spriteFactory) {
     this.rows = rows;
     this.cols = cols;
-    this.createContainer(x);
+    this.reelSet = reelSet;
+    this.gameState = gameState;
+    this.spriteFactory = spriteFactory;
+    this.container = new PIXI.Container();
     this.createTiles();
   }
   updateTiles() {
@@ -27,8 +27,8 @@ export class Reel {
     }
   }
   newRound(row, col) {
-    this.matrix = Config.Reelset;
-    this.updateRow = GameState.reelPositions[col];
+    this.matrix = this.reelSet;
+    this.updateRow = this.gameState.reelPositions[col];
     let texture = "";
     if (row == 1) {
       this.updateRow = this.updateRow + 1;
@@ -46,11 +46,11 @@ export class Reel {
     }
     const cellValue = this.matrix[col][this.updateRow];
     //Populate the new matrix's values
-    GameState.updatedMatrix[row][col] = cellValue;
-    console.log("show: ", GameState.updatedMatrix);
+    this.gameState.updatedMatrix[row][col] = cellValue;
+    console.log("show: ", this.gameState.updatedMatrix);
     texture = cellValue + "_symbol";
 
-    const tile = App.sprite(texture);
+    const tile = this.spriteFactory(texture);
     tile.width = window.innerWidth / this.cols;
     tile.height = (window.innerHeight * 0.7) / this.rows;
     this.container.addChild(tile);
