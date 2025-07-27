@@ -1,6 +1,6 @@
 import * as PIXI from "pixi.js";
 import { App } from "../../core/App";
-
+import { gsap } from "gsap/gsap-core";
 export class Reel {
   constructor(rows, cols, reelSet, gameState, spriteFactory) {
     this.rows = rows;
@@ -47,6 +47,7 @@ export class Reel {
 
     const textureKey = cellValue + "_symbol";
     const tile = this.spriteFactory(textureKey);
+    tile.symbolID = cellValue;
 
     tile.width = window.innerWidth / this.cols;
     tile.height = (window.innerHeight * 0.7) / this.rows;
@@ -67,6 +68,8 @@ export class Reel {
     // Remove the old tile
     const oldTile = columnTiles[row];
     const newTile = this.spriteFactory(textureKey); // returns a Sprite, not a Texture
+    newTile.symbolID = symbol;
+
 
     newTile.width = oldTile.width;
     newTile.height = oldTile.height;
@@ -84,52 +87,45 @@ export class Reel {
 
   this.spinningReels[reelIndex] = false;
 }
-  
   spinAnimation(onComplete) {
-    const reelSpeed = 20;
-    const spinTime = [60, 90, 120, 150, 180]; // stop frames
-    let frame = 0;
+  const reelSpeed = 20;
+  const spinTime = [60, 90, 120, 150, 180]; // stop frames
+  let frame = 0;
 
-  for (let row = 0; row < this.rows; row++) {
-    for (let col = 0; col < this.cols; col++) {
-      let pos = this.gameState.reelPositions[col] + row;
-      if (pos >= this.reelSet[col].length) pos = pos % this.reelSet[col].length;
+  // Mark all reels as spinning
+  this.spinningReels = Array(this.cols).fill(true);
 
-      this.gameState.updatedMatrix[row][col] = this.reelSet[col][pos];
+  const animate = (delta) => {
+    frame += delta;
+
+    // Move only tiles in spinning reels
+    this.tiles.forEach((tile, index) => {
+      const reelIndex = index % this.cols;
+      if (!this.spinningReels[reelIndex]) return;
+
+      tile.y += reelSpeed;
+      if (tile.y > window.innerHeight * 0.7) {
+        tile.y -= window.innerHeight * 0.7;
+      }
+    });
+
+    // Stop reels one by one
+    for (let i = 0; i < this.cols; i++) {
+      if (this.spinningReels[i] && frame >= spinTime[i]) {
+        this.stopReel(i);
+      }
     }
-  }
-    // tack which reels are spinning
-    this.spinningReels = Array(this.cols).fill(true);
 
-    const animate = (delta) => {
-      frame += delta;
+    // When all reels have stopped
+    if (this.spinningReels.every((r) => !r)) {
+      App.app.ticker.remove(animate);
+      if (onComplete) onComplete();  // Callback for scoring and highlighting
+    }
+  };
 
-      this.reelTiles = Array.from({ length: this.cols }, () => []);
-      // Move only the reels stilll spinning
-      this.reelTiles.forEach((reelTiles, i) => {
-        if (!this.spinningReels[i]) return;
-        reelTiles.forEach((tile) => {
-          tile.y += reelSpeed;
-          if (tile.y > window.innerHeight * 0.7) {
-            tile.y -= window.innerHeight * 0.7;
-          }
-        });
-      });
+  App.app.ticker.add(animate);
+}
 
-      // Stop reels one by one
-      for (let i = 0; i < this.cols; i++) {
-        if (this.spinningReels[i] && frame >= spinTime[i]) {
-          this.stopReel(i);
-        }
-      }
 
-      // All reels stopped
-      if (this.spinningReels.every((r) => !r)) {
-        App.app.ticker.remove(animate);
-        if (onComplete) onComplete();
-      }
-    };
 
-    App.app.ticker.add(animate);
-  }
 }
