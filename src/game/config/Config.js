@@ -1,6 +1,6 @@
 // Define all of the entities here
-import { Game } from "./Game";
-import { Tools } from "../system/Tools";
+import { GameManager } from "../managers/GameManager";
+import { Tools } from "../../core/Tools";
 
 export const Config = {
   loader: Tools.massiveRequire(
@@ -155,7 +155,7 @@ export const Config = {
       fill: ["#000000"],
     },
   },
-  startScene: Game,
+  startScene: GameManager,
 };
 
 

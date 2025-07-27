@@ -1,8 +1,8 @@
 import * as PIXI from "pixi.js";
-import { App } from "../system/App";
+import { App } from "../../core/App";
 import { LabelScore } from "./LabelScore";
-import { GameState } from "./GameState";
-import { Config } from "./Config";
+import { GameState } from "../config/GameState";
+import { Config } from "../config/Config";
 
 export class PlayAndTrack {
   constructor(rows, cols, reel, scoreLogic) {

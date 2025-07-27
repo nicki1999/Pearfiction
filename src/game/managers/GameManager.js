@@ -1,11 +1,11 @@
 import * as PIXI from "pixi.js";
-import { App } from "../system/App";
-import { Reel } from "./Reel";
-import { PlayAndTrack } from "./PlayAndTrack";
+import { App } from "../../core/App";
+import { Reel } from "../world/Reel";
+import { PlayAndTrack } from "../ui/PlayAndTrack";
 import { ScoreLogic } from "./ScoreLogic";
-import { Config } from "./Config";
-import { GameState } from "./GameState";
-export class Game {
+import { Config } from "../config/Config";
+import { GameState } from "../config/GameState";
+export class GameManager {
   //evey game has a container containing all of the scene elements
   constructor() {
     this.container = new PIXI.Container();
