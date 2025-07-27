@@ -179,6 +179,7 @@ This improves scalability and keeps related logic together.
 ### 6. Slot Machine Reel Animation (Bonus)
 Added a **smooth, slot-machine-like reel animation** using PixiJS’s `ticker`.  
 Reels now spin with staggered stop timing, creating a natural slot machine effect for a more engaging player experience.
+![Game Demo](src/demo/Animation.gif.gif)
 
 ### 7. Instant Window Resize Responsiveness
 The interface now adjusts dynamically to window size changes without requiring a page reload.
