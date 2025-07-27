@@ -10,6 +10,7 @@ export class PlayAndTrack {
     this.cols = cols;
     this.reel = reel;
     this.scoreLogic = scoreLogic;
+    this.isSpinning = false;
     this.createContainer();
     this.layoutContainer();
   }
@@ -18,6 +19,7 @@ export class PlayAndTrack {
     this.container = new PIXI.Container();
   }
   layoutContainer() {
+     this.container.removeChildren();
     for (let row = 0; row < this.rows; row++) {
       for (let col = 0; col < this.cols; col++) {
         this.layout(row, col);
@@ -30,10 +32,12 @@ export class PlayAndTrack {
     if (row === 0) {
       texture = "spin_button";
     } else {
-      const labelScore = new LabelScore();
-      labelScore.x = (window.innerWidth - labelScore.width) / 2 - 100;
-      labelScore.y = window.innerHeight * 0.77;
-      this.container.addChild(labelScore);
+      if (!this.labelScore || !this.container.children.includes(this.labelScore)) {
+  this.labelScore = new LabelScore();
+  this.labelScore.x = (window.innerWidth - this.labelScore.width) / 2 - 100;
+  this.labelScore.y = window.innerHeight * 0.77;
+  this.container.addChild(this.labelScore);
+}
       return; // Skip creating a tile
     }
     const tile = App.sprite(texture);
@@ -41,10 +45,15 @@ export class PlayAndTrack {
     tile.buttonMode = true;
 
     tile.on("pointerdown", () => {
-      GameState.reelPositions = this.randomSpin();
+        if (this.isSpinning) return; 
+      this.isSpinning = true;
+        GameState.reelPositions = this.randomSpin();
       // Call a custom handler method
-      this.reel.updateTiles();
-      this.scoreLogic.checkPaylines();
+      this.reel.spinAnimation(() => {
+    this.scoreLogic.checkPaylines(); 
+            this.isSpinning = false;
+
+  });
     });
 
     tile.width = window.innerWidth / this.rows / this.rows;

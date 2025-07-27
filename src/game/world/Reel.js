@@ -16,7 +16,6 @@ export class Reel {
     this.container.removeChildren();
     this.tiles = [];
     this.createTiles();
-    this.spinAnimation();
 
   }
   createContainer(x) {
@@ -57,23 +56,77 @@ export class Reel {
     this.tiles.push(tile);
     this.container.addChild(tile);
   }
-  spinAnimation(){
-    const duration = 20;
+
+   stopReel(reelIndex) {
+  const columnTiles = this.tiles.filter((_, idx) => idx % this.cols === reelIndex);
+
+  for (let row = 0; row < this.rows; row++) {
+    const symbol = this.gameState.updatedMatrix[row][reelIndex];
+    const textureKey = symbol + "_symbol";
+
+    // Remove the old tile
+    const oldTile = columnTiles[row];
+    const newTile = this.spriteFactory(textureKey); // returns a Sprite, not a Texture
+
+    newTile.width = oldTile.width;
+    newTile.height = oldTile.height;
+    newTile.x = oldTile.x;
+    newTile.y = row * (window.innerHeight * 0.7) / this.rows;
+
+    // Replace in container
+    this.container.removeChild(oldTile);
+    this.container.addChild(newTile);
+
+    // Replace in tiles array
+    const tileIndex = this.tiles.indexOf(oldTile);
+    if (tileIndex !== -1) this.tiles[tileIndex] = newTile;
+  }
+
+  this.spinningReels[reelIndex] = false;
+}
+  
+  spinAnimation(onComplete) {
+    const reelSpeed = 20;
+    const spinTime = [60, 90, 120, 150, 180]; // stop frames
     let frame = 0;
 
-      const animate = (delta) => {
+  for (let row = 0; row < this.rows; row++) {
+    for (let col = 0; col < this.cols; col++) {
+      let pos = this.gameState.reelPositions[col] + row;
+      if (pos >= this.reelSet[col].length) pos = pos % this.reelSet[col].length;
+
+      this.gameState.updatedMatrix[row][col] = this.reelSet[col][pos];
+    }
+  }
+    // tack which reels are spinning
+    this.spinningReels = Array(this.cols).fill(true);
+
+    const animate = (delta) => {
       frame += delta;
-      this.tiles.forEach((tile, index) => {
-        const phase = (index % 2 === 0 ? 1 : -1);
-        tile.y += Math.sin(frame / 3) * 1.5 * phase;
-        tile.rotation = Math.sin(frame / 5) * 0.05;
+
+      this.reelTiles = Array.from({ length: this.cols }, () => []);
+      // Move only the reels stilll spinning
+      this.reelTiles.forEach((reelTiles, i) => {
+        if (!this.spinningReels[i]) return;
+        reelTiles.forEach((tile) => {
+          tile.y += reelSpeed;
+          if (tile.y > window.innerHeight * 0.7) {
+            tile.y -= window.innerHeight * 0.7;
+          }
+        });
       });
 
-      if (frame > duration) {
-        this.tiles.forEach((tile) => {
-          tile.rotation = 0;
-        });
+      // Stop reels one by one
+      for (let i = 0; i < this.cols; i++) {
+        if (this.spinningReels[i] && frame >= spinTime[i]) {
+          this.stopReel(i);
+        }
+      }
+
+      // All reels stopped
+      if (this.spinningReels.every((r) => !r)) {
         App.app.ticker.remove(animate);
+        if (onComplete) onComplete();
       }
     };
 

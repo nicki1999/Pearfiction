@@ -13,6 +13,19 @@ export class GameManager {
     window.addEventListener("resize", this.onResize.bind(this));
   }
 
+  spin() {
+  // Generate random reel positions for the next spin
+  this.GameState.reelPositions = Array.from(
+    { length: 5 },
+    () => Math.floor(Math.random() * 21)
+  );
+
+  // Trigger reel animation; when animation completes, update symbols
+  this.reel.spinAnimation(() => {
+    this.scoreLogic.checkPaylines(); // Calculate wins
+    this.isSpinning = false;
+  });
+}
   createBackground() {
     this.bg = App.sprite("bg");
     this.resizeBackground();
