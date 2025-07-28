@@ -183,3 +183,6 @@ Reels now spin with staggered stop timing, creating a natural slot machine effec
 
 ### 7. Instant Window Resize Responsiveness
 The interface now adjusts dynamically to window size changes without requiring a page reload.
+
+### 8. Unit Test Coverage
+Comprehensive unit tests have been added, ensuring all major game components are validated for functionality and reliability.
