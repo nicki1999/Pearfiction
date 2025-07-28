@@ -186,3 +186,5 @@ The interface now adjusts dynamically to window size changes without requiring a
 
 ### 8. Unit Test Coverage
 Comprehensive unit tests have been added, ensuring all major game components are validated for functionality and reliability.
+<img width="737" height="953" alt="UnitTest" src="https://github.com/user-attachments/assets/0496c028-fc9b-4bd3-baa5-fb8136c196d4" />
+
