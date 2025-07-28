@@ -1,5 +1,5 @@
 import * as PIXI from "pixi.js";
-import { App } from "../../core/App";
+import { App } from "../../core/App.js";
 import { Reel } from "../world/Reel";
 import { PlayAndTrack } from "../ui/PlayAndTrack";
 import { ScoreLogic } from "./ScoreLogic";

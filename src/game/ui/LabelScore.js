@@ -1,7 +1,7 @@
 import * as PIXI from "pixi.js";
 import { Config } from "../config/Config";
 import { GameState } from "../../game/config/GameState";
-import { App } from "../../core/App";
+import { App } from "../../core/App.js";
 
 export class LabelScore extends PIXI.Text {
   constructor() {

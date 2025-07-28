@@ -1,5 +1,5 @@
 import * as PIXI from "pixi.js";
-import { App } from "../../core/App";
+import { App } from "../../core/App.js";
 import { gsap } from "gsap/gsap-core";
 export class Reel {
   constructor(rows, cols, reelSet, gameState, spriteFactory) {

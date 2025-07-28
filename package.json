@@ -4,20 +4,32 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "webpack --config webpack/prod.js ",
-    "start": "webpack-dev-server --config webpack/base.js --open"
+    "build": "webpack --config webpack/prod.js",
+    "start": "webpack-dev-server --config webpack/base.js --open",
+    "test": "jest"
   },
   "dependencies": {
     "gsap": "^3.10.4",
     "pixi.js": "^6.5.1"
   },
   "devDependencies": {
+    "@babel/core": "^7.28.0",
+    "@babel/preset-env": "^7.28.0",
+    "babel-jest": "^29.7.0",
     "babel-loader": "^8.2.5",
     "clean-webpack-plugin": "^4.0.0",
     "file-loader": "^6.2.0",
     "html-webpack-plugin": "^5.5.0",
+    "jest": "^29.7.0",
+    "jest-environment-jsdom": "^30.0.5",
     "webpack-cli": "^4.10.0",
     "webpack-dev-server": "^4.9.3",
     "webpack-merge": "^5.8.0"
-  }
+  },
+"jest": {
+  "testEnvironment": "jsdom",
+  "transformIgnorePatterns": ["/node_modules/(?!gsap|pixi.js)"],
+  "setupFiles": ["<rootDir>/src/tests/setupJest.js"]
+}
+
 }

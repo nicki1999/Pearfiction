@@ -2,11 +2,17 @@
 import { GameManager } from "../managers/GameManager";
 import { Tools } from "../../core/Tools";
 
-export const Config = {
-  loader: Tools.massiveRequire(
-    require["context"]("./../../sprites/", true, /\.(mp3|png|jpe?g)$/)
-  ),
+let loader;
+if (typeof require.context === "function") {
+  loader = Tools.massiveRequire(
+    require.context("./../../sprites/", true, /\.(mp3|png|jpe?g)$/)
+  );
+} else {
+  loader = {}; // Skip actual sprite loading in tests
+}
 
+export const Config = {
+  loader,
     Reelset: [
       //B1
       [

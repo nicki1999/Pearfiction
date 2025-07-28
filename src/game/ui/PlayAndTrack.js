@@ -1,5 +1,5 @@
 import * as PIXI from "pixi.js";
-import { App } from "../../core/App";
+import { App } from "../../core/App.js";
 import { LabelScore } from "./LabelScore";
 import { GameState } from "../config/GameState";
 import { Config } from "../config/Config";
